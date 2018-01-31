@@ -1,2 +1,2 @@
 # passivescan
-Multithreaded passive scanner, that uses Shodan and Censys APIs
+Multithreaded passive scanner via Shodan and Censys APIs
