@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = "@tsmall888"
+__author__ = "@t33m"
 __license__ = "MIT"
 
 from gevent import monkey
@@ -36,7 +36,7 @@ class PassiveScan(object):
 		if not self.__threads: 
 			self.__threads = len(IPNetwork(self.__ip)) if len(IPNetwork(self.__ip)) <= 10 else 10
 		if len(IPNetwork(self.__ip)) < int(self.__threads):
-			print "Please decrease number of threads to number of hosts <= %s" % len(IPNetwork(self.__ip))
+			print("Please decrease number of threads to number of hosts <= %s" % len(IPNetwork(self.__ip)))
 			exit()
 		
 		queue = JoinableQueue()
@@ -77,7 +77,7 @@ class PassiveScan(object):
 		
 		try:
 			result = api.host(ip)
-		except shodan.APIError, e:
+		except shodan.APIError as e:
 			data["error"] = str(e)
 		else:
 			if isinstance(result, dict):
@@ -104,7 +104,7 @@ class PassiveScan(object):
 		
 		try:
 			result = api.view(ip)
-		except censys.base.CensysException, e:
+		except censys.base.CensysException as e:
 			data["error"] = str(e)
 		else:
 			if isinstance(result, dict):
@@ -126,26 +126,26 @@ class PassiveScan(object):
 
 	def output(self, data):
 		if self.__json:
-			print json.dumps(data, indent=4, sort_keys=False)
+			print(json.dumps(data, indent=4, sort_keys=False))
 
 		else:
 			for key, value in data.iteritems():
 				if key is "ip":
-					print colored(key, 'yellow'), colored(value, 'green')
+					print(colored(key, 'yellow'), colored(value, 'green'))
 				
 				if key in ['shodan', 'censys']:
-					print "  %s:" % (colored(key, 'yellow'))
+					print("  %s:" % (colored(key, 'yellow')))
 				
 				if isinstance(value, dict):
 					for key, value in value.iteritems():
 						if key == "ports":
 							if self.__ports:
 								if key == "ports":
-									print "    %s: %s" % (colored(key, 'yellow'), " ".join([colored(port, 'red') if port in self.__ports else colored(port, 'green') for port in value]))
+									print("    %s: %s" % (colored(key, 'yellow'), " ".join([colored(port, 'red') if port in self.__ports else colored(port, 'green') for port in value])))
 								else:
-									print "    %s: %s" % (colored(key, 'yellow'), colored(value, 'green'))
+									print("    %s: %s" % (colored(key, 'yellow'), colored(value, 'green')))
 						else:
-							print "    %s: %s" % (colored(key, 'yellow'), colored(value, 'green'))
+							print("    %s: %s" % (colored(key, 'yellow'), colored(value, 'green')))
 			
 
 def main():
